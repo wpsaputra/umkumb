@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use Yii;
@@ -9,6 +8,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use yii\data\SqlDataProvider;
 
 class SiteController extends Controller
 {
@@ -121,6 +121,79 @@ class SiteController extends Controller
      */
     public function actionAbout()
     {
-        return $this->render('about');
+        // Ternak
+        $sql = '
+            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname]
+        ';
+
+        $arr_sort_attributes = [
+            'kode_operator',
+            'realname',
+            'count',
+        ];
+
+        // Palawija
+        $sql2 = "
+            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok]
+            HAVING [flag_dok]='spw'
+        ";
+
+        $arr_sort_attributes2 = [
+            'kode_operator',
+            'realname',
+            'count',
+        ];
+
+        // Padi
+        $sql3 = "
+            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok]
+            HAVING [flag_dok]='spd'
+        ";
+
+        $arr_sort_attributes3 = [
+            'kode_operator',
+            'realname',
+            'count',
+        ];
+
+        
+        return $this->render('about', [
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3),
+        ]);
+    }
+
+    public function getSqlDataProvider($sql, $arr_sort_attributes)
+    {
+        $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
+
+        $provider = new SqlDataProvider([
+            'sql' => $sql,
+            'totalCount' => $count,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'attributes' => [
+                    'kode_operator',
+                    'realname',
+                    'count',
+                ],
+            ],
+        ]);
+        return $provider;
     }
 }

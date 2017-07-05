@@ -1,53 +1,118 @@
 <?php
 
 /* @var $this yii\web\View */
+use miloschuman\highcharts\Highcharts;
 
 $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
     <div class="body-content">
-
         <div class="row">
             <div class="col-lg-4">
-                <h2>Heading</h2>
+            <?php 
+            echo Highcharts::widget([
+                'options' => [
+                    'title' => ['text' => 'Progress Entri Padi'],
+                    'credits' => ['enabled' => false],
+                    'colors' => [
+                        // '#7cb5ec',
+                        '#90ed7d',
+                        '#f7a35c',
+                        '#434348',
+                    ],
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                    'plotOptions' => [
+                        'pie' => [
+                            'cursor' => 'pointer',
+                        ],
+                    ],
+                    'series' => [
+                        [ // new opening bracket
 
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+
+                            'type' => 'pie',
+                            'name' => 'Elements',
+                            'data' => [
+                                ['Clean', 30],
+                                ['Error', 20],
+                                ['Blm Entri', 50],
+                            ],
+                                        // 'dataLabels' => [
+                                        //     'enabled' => false
+                                        // ],
+                                        // 'showInLegend' => true
+                        ] // new closing bracket
+                    ],
+                ],
+            ]);
+            
+            ?>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+            <?php 
+            echo Highcharts::widget([
+                'options' => [
+                    'credits' => ['enabled' => false],
+                    'title' => ['text' => 'Progress Entri Palawija'],
+                    'plotOptions' => [
+                        'pie' => [
+                            'cursor' => 'pointer',
+                        ],
+                    ],
+                    'series' => [
+                        [ // new opening bracket
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                            'type' => 'pie',
+                            'name' => 'Elements',
+                            'data' => [
+                                ['Firefox', 45.0],
+                                ['IE', 26.8],
+                                ['Safari', 8.5],
+                                ['Opera', 6.2],
+                                ['Others', 0.7]
+                            ],
+                        ] // new closing bracket
+                    ],
+                ],
+            ]);
+            ?>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
+            <?php 
+            echo Highcharts::widget([
+                'options' => [
+                    'credits' => ['enabled' => false],
+                    'title' => ['text' => 'Progress Entri Peternakan'],
+                    'plotOptions' => [
+                        'pie' => [
+                            'cursor' => 'pointer',
+                        ],
+                    ],
+                    'series' => [
+                        [ // new opening bracket
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                            'type' => 'pie',
+                            'name' => 'Elements',
+                            'data' => [
+                                ['Firefox', 45.0],
+                                ['IE', 26.8],
+                                ['Safari', 8.5],
+                                ['Opera', 6.2],
+                                ['Others', 0.7]
+                            ],
+                        ] // new closing bracket
+                    ],
+                ],
+            ]);
+            ?>
             </div>
+
+
+
+
+
+
+
         </div>
-
     </div>
 </div>
