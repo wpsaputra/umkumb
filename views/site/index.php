@@ -3,12 +3,53 @@
 /* @var $this yii\web\View */
 use miloschuman\highcharts\Highcharts;
 
-$this->title = 'My Yii Application';
+$this->title = 'Monitoring SOUT';
+
+// Ternak
 $sql = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_ternak] where [status_dok]='C'";
 $clean_ternak = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
 $sql2 = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_ternak] where [status_dok]='E'";
 $error_ternak = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
+$total_ternak = 4220;
+$blm_entri_ternak = $total_ternak - $clean_ternak - $error_ternak;
+
+$clean_ternak = $clean_ternak / $total_ternak;
+$error_ternak = $error_ternak / $total_ternak;
+$blm_entri_ternak = $blm_entri_ternak / $total_ternak;
+
+// Palawija
+$sql = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_tp] where [status_dok]='C' AND [flag_dok]='spw'";
+$clean_palawija = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
+
+$sql2 = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_tp] where [status_dok]='E' AND [flag_dok]='spw'";
+$error_palawija = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
+$total_palawija = 4627;
+$blm_entri_palawija = $total_palawija - $clean_palawija - $error_palawija;
+
+$clean_palawija = $clean_palawija / $total_palawija;
+$error_palawija = $error_palawija / $total_palawija;
+$blm_entri_palawija = $blm_entri_palawija / $total_palawija;
+
+// Padi
+$sql = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_tp] where [status_dok]='C' AND [flag_dok]='spd'";
+$clean_padi = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
+
+$sql2 = "SELECT [status_dok] FROM [SOUT2017Sampel].[dbo].[t_rt_tp] where [status_dok]='E' AND [flag_dok]='spd'";
+$error_padi = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
+$total_padi = 2126;
+$blm_entri_padi = $total_padi - $clean_padi - $error_padi;
+
+$clean_padi = $clean_padi / $total_padi;
+$error_padi = $error_padi / $total_padi;
+$blm_entri_padi = $blm_entri_padi / $total_padi;
+
+// https://stackoverflow.com/questions/676824/how-to-calculate-the-difference-between-two-dates-using-php
+$current_date = new DateTime();
+$deadline_date = new DateTime('08/31/2017');
+$diff = $current_date->diff($deadline_date);
+// print_r($diff->days);
+
 
 
 function printPie($judul, $clean, $error, $blm_entri)
@@ -17,22 +58,28 @@ function printPie($judul, $clean, $error, $blm_entri)
         'options' => [
             'title' => ['text' => $judul],
             'credits' => ['enabled' => false],
+            'tooltip' => [
+                'pointFormat' => '{series.name}: <b>{point.percentage:.1f}%</b>'
+            ],
             'colors' => [
-                        // '#7cb5ec',
+                // '#7cb5ec',
                 '#90ed7d',
                 '#f7a35c',
-                '#434348',
+                '#3A3A4F',
+                // '#434348',
             ],
 
             'plotOptions' => [
                 'pie' => [
                     'cursor' => 'pointer',
+                    'dataLabels' => [
+                        'enabled' => true,
+                        'format' => '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    ]
                 ],
             ],
             'series' => [
                 [ // new opening bracket
-
-
 
                     'type' => 'pie',
                     'name' => 'Elements',
@@ -54,15 +101,20 @@ function printPie($judul, $clean, $error, $blm_entri)
 ?>
 <div class="site-index">
     <div class="body-content">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning!</strong> Pengolahan SOUT akan berakhir <?php print_r($diff->days);?> hari lagi
+        </div>
+
         <div class="row">
             <div class="col-lg-4">
-                <?php printPie('Progress Entri Padi', 10, 20, 70); ?>
+                <?php printPie('Progress Entri Padi', $clean_padi, $error_padi, $blm_entri_padi); ?>
             </div>
             <div class="col-lg-4">
-                <?php printPie('Progress Entri Palawija', 10, 20, 70); ?>
+                <?php printPie('Progress Entri Palawija', $clean_palawija, $error_palawija, $blm_entri_palawija); ?>
             </div>
             <div class="col-lg-4">
-                <?php printPie('Progress Entri Peternakan', 10, 20, 70); ?>
+                <?php printPie('Progress Entri Peternakan', $clean_ternak, $error_ternak, $blm_entri_ternak); ?>
             </div>
 
         </div>
