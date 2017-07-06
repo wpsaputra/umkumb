@@ -103,14 +103,41 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $sql = "
+        SELECT ([kode_prov]
+            +[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[B12_R1201]
+            ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
+            ,[B12_R1202]
+            ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
+        FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
+        ";
+        // $sql = "
+        // SELECT [kode_prov]
+        //     ,[kode_kab]
+        //     ,[kode_kec]
+        //     ,[kode_desa]
+        //     ,[nbs]
+        //     ,[nu]
+        //     ,[kom]
+        //     ,[kode_operator]
+        //     ,[B12_R1201]
+        //     ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
+        //     ,[B12_R1202]
+        //     ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
+        // FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
+        // ";
 
-            return $this->refresh();
-        }
+        $arr_sort_attributes = [];
+
         return $this->render('contact', [
-            'model' => $model,
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes),
         ]);
     }
 
@@ -168,7 +195,7 @@ class SiteController extends Controller
             'count',
         ];
 
-        
+
         return $this->render('about', [
             'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes),
             'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2),
@@ -187,11 +214,7 @@ class SiteController extends Controller
                 'pageSize' => 10,
             ],
             'sort' => [
-                'attributes' => [
-                    'kode_operator',
-                    'realname',
-                    'count',
-                ],
+                'attributes' => $arr_sort_attributes,
             ],
         ]);
         return $provider;
