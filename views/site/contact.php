@@ -25,6 +25,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $provider,
                     'layout' => "{items}\n{summary}\n{pager}",
                     'summaryOptions' => ['class' => 'summary pull-right'],
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'kode_wilayah',
+                        'nu', 
+                        'kom',
+                        'kode_operator', 
+                        'B12_R1201', 
+                        'TOTAL', 
+                        'B12_R1202', 
+                        'TOTAL2',
+                        [
+                            'attribute' => 'konsistensi_entrian',
+                            'format' => 'raw',
+                            'value' => function ($model) {                      
+                                    return '<div>'.$model['TOTAL2'].' and other html-code</div> <i class="glyphicon glyphicon-ok"></i><i class="glyphicon glyphicon-remove"></i>';
+                            },
+                        ],
+
+                    ],
                     // 'pagerOptions'=>['class' => 'pull-right']
                 ]);
                 ?>

@@ -36,22 +36,20 @@ $script = <<< JS
 JS;
 $this->registerJs($script, yii\web\View::POS_END);
 
-/****** Script for SelectTopNRows command from SSMS  ******/
-// SELECT [kode_operator], COUNT([jumlah_entri])
-// FROM [SOUT2017Sampel].[dbo].[t_rt_ternak] GROUP BY [kode_operator]
-
-// SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
-// FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-// LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-// ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-// GROUP BY [kode_operator], [realname]
-
-// SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
-// FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-// LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-// ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-// GROUP BY [kode_operator], [realname], [flag_dok]
-// HAVING [flag_dok]='spd'
+function printGridView($data_provider){
+    echo GridView::widget([
+            'dataProvider' => $data_provider,
+            'layout' => "{items}\n{summary}\n{pager}",
+            'summaryOptions' => ['class' => 'summary pull-right'],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'kode_operator',
+                'realname',
+                'count',
+            ],
+            // 'pagerOptions'=>['class' => 'pull-right']
+        ]);
+}
 
 ?>
 <div class="site-about">
@@ -64,54 +62,29 @@ $this->registerJs($script, yii\web\View::POS_END);
     </ul>
 
     <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
-        <div class="row">
-        <div class="col-lg-12">
-        <h3>Padi</h3>
-        <?php
-        echo GridView::widget([
-            'dataProvider' => $provider3,
-            'layout' => "{items}\n{summary}\n{pager}",
-            'summaryOptions' => ['class' => 'summary pull-right'],
-            // 'pagerOptions'=>['class' => 'pull-right']
-        ]);
-        ?>
+        <div id="home" class="tab-pane fade in active">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Padi</h3>
+                    <?php printGridView($provider3); ?>
+                </div>
+            </div>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Palawija</h3>
+                    <?php printGridView($provider2); ?>
+                </div>
+            </div>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Peternakan</h3>
+                    <?php printGridView($provider); ?>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-    <div id="menu1" class="tab-pane fade">
-        <div class="row">
-        <div class="col-lg-12">
-        <h3>Palawija</h3>
-        <?php
-        echo GridView::widget([
-            'dataProvider' => $provider2,
-            'layout' => "{items}\n{summary}\n{pager}",
-            'summaryOptions' => ['class' => 'summary pull-right'],
-            // 'pagerOptions'=>['class' => 'pull-right']
-        ]);
-        ?>
-        </div>
-    </div>
-    </div>
-    <div id="menu2" class="tab-pane fade">
-        <div class="row">
-        <div class="col-lg-12">
-        <h3>Peternakan</h3>
-        <?php
-        echo GridView::widget([
-            'dataProvider' => $provider,
-            'layout' => "{items}\n{summary}\n{pager}",
-            'summaryOptions' => ['class' => 'summary pull-right'],
-            // 'pagerOptions'=>['class' => 'pull-right']
-        ]);
-        ?>
-        </div>
-    </div>
-    </div>
-    </div>
-
-
-
-
 </div>

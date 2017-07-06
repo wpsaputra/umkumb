@@ -104,40 +104,39 @@ class SiteController extends Controller
     public function actionContact()
     {
         $sql = "
-        SELECT ([kode_prov]
-            +[kode_kab]
-            +[kode_kec]
-            +[kode_desa]
-            +[nbs]) AS kode_wilayah
-            ,[nu]
-            ,[kom]
-            ,[kode_operator]
-            ,[B12_R1201]
-            ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
-            ,[B12_R1202]
-            ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
-        FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
+        FROM 
+        (SELECT ([kode_prov]
+                    +[kode_kab]
+                    +[kode_kec]
+                    +[kode_desa]
+                    +[nbs]) AS kode_wilayah
+                    ,[nu]
+                    ,[kom]
+                    ,[kode_operator]
+                    ,[B12_R1201]
+                    ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
+                    ,[B12_R1202]
+                    ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
+                FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]) b
         ";
-        // $sql = "
-        // SELECT [kode_prov]
-        //     ,[kode_kab]
-        //     ,[kode_kec]
-        //     ,[kode_desa]
-        //     ,[nbs]
-        //     ,[nu]
-        //     ,[kom]
-        //     ,[kode_operator]
-        //     ,[B12_R1201]
-        //     ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
-        //     ,[B12_R1202]
-        //     ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
-        // FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
-        // ";
 
-        $arr_sort_attributes = [];
+        $arr_sort_attributes = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator', 
+            'B12_R1201', 
+            'TOTAL', 
+            'B12_R1202', 
+            'TOTAL2',
+            
+        ];
+
+        $default_order = [];
 
         return $this->render('contact', [
-            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes),
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
         ]);
     }
 
@@ -150,11 +149,13 @@ class SiteController extends Controller
     {
         // Ternak
         $sql = '
-            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            SELECT b.kode_operator, b.realname, b.count 
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
             FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
             LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
             ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            GROUP BY [kode_operator], [realname]
+            GROUP BY [kode_operator], [realname]) b
         ';
 
         $arr_sort_attributes = [
@@ -165,12 +166,14 @@ class SiteController extends Controller
 
         // Palawija
         $sql2 = "
-            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            SELECT b.kode_operator, b.realname, b.count
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
             FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
             LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
             ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
             GROUP BY [kode_operator], [realname], [flag_dok]
-            HAVING [flag_dok]='spw'
+            HAVING [flag_dok]='spw') b
         ";
 
         $arr_sort_attributes2 = [
@@ -181,12 +184,14 @@ class SiteController extends Controller
 
         // Padi
         $sql3 = "
-            SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
+            SELECT b.kode_operator, b.realname, b.count
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
             FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
             LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
             ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
             GROUP BY [kode_operator], [realname], [flag_dok]
-            HAVING [flag_dok]='spd'
+            HAVING [flag_dok]='spd') b
         ";
 
         $arr_sort_attributes3 = [
@@ -195,15 +200,17 @@ class SiteController extends Controller
             'count',
         ];
 
+        $default_order = ['count'=>SORT_DESC];
+
 
         return $this->render('about', [
-            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes),
-            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2),
-            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3),
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
         ]);
     }
 
-    public function getSqlDataProvider($sql, $arr_sort_attributes)
+    public function getSqlDataProvider($sql, $arr_sort_attributes, $default_order)
     {
         $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
@@ -215,6 +222,7 @@ class SiteController extends Controller
             ],
             'sort' => [
                 'attributes' => $arr_sort_attributes,
+                'defaultOrder' => $default_order
             ],
         ]);
         return $provider;
