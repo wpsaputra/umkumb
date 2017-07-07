@@ -103,40 +103,314 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+        // Ternak
         $sql = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
         FROM 
-        (SELECT ([kode_prov]
-                    +[kode_kab]
-                    +[kode_kec]
-                    +[kode_desa]
-                    +[nbs]) AS kode_wilayah
-                    ,[nu]
-                    ,[kom]
-                    ,[kode_operator]
-                    ,[B12_R1201]
-                    ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
-                    ,[B12_R1202]
-                    ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
-                FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]) b
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[B12_R1201]
+            ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
+            ,[B12_R1202]
+            ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom], [kode_operator], [B12_R1201]
+                ,[B12_R1201a_1]
+                ,[B12_R1201a_2]
+                ,[B12_R1201b]
+                ,[B12_R1201c]
+                ,[B12_R1201d]
+                ,[B12_R1201e]
+                ,[B12_R1201f]
+                ,[B12_R1202]
+                ,[B12_R1202a_1]
+                ,[B12_R1202a_2]
+                ,[B12_R1202a_3]
+                ,[B12_R1202a_4]
+                ,[B12_R1202b]
+                ,[B12_R1202c]
+                ,[B12_R1202d]
+                ,[B12_R1202e]
+                ,[B12_R1202f]) b
         ";
 
         $arr_sort_attributes = [
             'kode_wilayah',
             'nu', 
             'kom',
-            'kode_operator', 
+            'kode_operator',
+            'realname', 
             'B12_R1201', 
             'TOTAL', 
             'B12_R1202', 
             'TOTAL2',
             
         ];
+        
+        // Palawija
+        $sql2 = "
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        FROM
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[b14_r1405a_k2]
+            ,(ISNULL([b14_r1405a_1k2], 0) + ISNULL([b14_r1405a_2k2], 0)) AS TOTAL
+            ,[b14_r1405b_4k2]
+            ,(ISNULL([b14_r1405b_4i_k2], 0) + ISNULL([b14_r1405b_4ii_k2], 0)) AS TOTAL2
+        FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+        LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+        ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+        GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom]
+                ,[b14_r1405a_k2]
+                ,[b14_r1405a_1k2]
+                ,[b14_r1405a_2k2]
+                ,b14_r1405b_4k2
+                ,[b14_r1405b_4i_k2]
+                ,[b14_r1405b_4ii_k2]
+                ,[flag_dok]
+        HAVING [flag_dok]='spw') b
+        ";
+
+        $arr_sort_attributes2 = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator',
+            'realname', 
+            'b14_r1405a_k2', 
+            'TOTAL', 
+            'b14_r1405b_4k2', 
+            'TOTAL2',
+            
+        ];
+
+        // Padi
+        $sql3 = "
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        FROM
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[b14_r1405a_k2]
+            ,(ISNULL([b14_r1405a_1k2], 0) + ISNULL([b14_r1405a_2k2], 0)) AS TOTAL
+            ,[b14_r1405b_4k2]
+            ,(ISNULL([b14_r1405b_4i_k2], 0) + ISNULL([b14_r1405b_4ii_k2], 0)) AS TOTAL2
+        FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+        LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+        ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+        GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom]
+                ,[b14_r1405a_k2]
+                ,[b14_r1405a_1k2]
+                ,[b14_r1405a_2k2]
+                ,b14_r1405b_4k2
+                ,[b14_r1405b_4i_k2]
+                ,[b14_r1405b_4ii_k2]
+                ,[flag_dok]
+        HAVING [flag_dok]='spd') b
+        ";
+
+        $arr_sort_attributes3 = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator',
+            'realname', 
+            'b14_r1405a_k2', 
+            'TOTAL', 
+            'b14_r1405b_4k2', 
+            'TOTAL2',
+            
+        ];
+
+        
 
         $default_order = [];
 
         return $this->render('contact', [
             'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
+
+        ]);
+    }
+
+    public function actionXyz()
+    {
+        // Ternak
+        $sql = "
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
+        FROM 
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[B12_R1201]
+            ,(ISNULL([B12_R1201a_1], 0) + ISNULL([B12_R1201a_2], 0) + ISNULL([B12_R1201b], 0) + ISNULL([B12_R1201c], 0) + ISNULL([B12_R1201d], 0) + ISNULL([B12_R1201e], 0) + ISNULL([B12_R1201f], 0)) as TOTAL
+            ,[B12_R1202]
+            ,(ISNULL([B12_R1202a_1], 0) + ISNULL([B12_R1202a_2], 0) + ISNULL([B12_R1202a_3], 0) + ISNULL([B12_R1202a_4], 0) + ISNULL([B12_R1202b], 0) + ISNULL([B12_R1202c], 0) + ISNULL([B12_R1202d], 0) + ISNULL([B12_R1202e], 0) + ISNULL([B12_R1202f], 0)) AS TOTAL2
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom], [kode_operator], [B12_R1201]
+                ,[B12_R1201a_1]
+                ,[B12_R1201a_2]
+                ,[B12_R1201b]
+                ,[B12_R1201c]
+                ,[B12_R1201d]
+                ,[B12_R1201e]
+                ,[B12_R1201f]
+                ,[B12_R1202]
+                ,[B12_R1202a_1]
+                ,[B12_R1202a_2]
+                ,[B12_R1202a_3]
+                ,[B12_R1202a_4]
+                ,[B12_R1202b]
+                ,[B12_R1202c]
+                ,[B12_R1202d]
+                ,[B12_R1202e]
+                ,[B12_R1202f]) b
+        WHERE [B12_R1201]<>[TOTAL] OR [B12_R1202]<>[TOTAL2]
+        ";
+
+        $arr_sort_attributes = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator',
+            'realname', 
+            'B12_R1201', 
+            'TOTAL', 
+            'B12_R1202', 
+            'TOTAL2',
+            
+        ];
+        
+        // Palawija
+        $sql2 = "
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        FROM
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[b14_r1405a_k2]
+            ,(ISNULL([b14_r1405a_1k2], 0) + ISNULL([b14_r1405a_2k2], 0)) AS TOTAL
+            ,[b14_r1405b_4k2]
+            ,(ISNULL([b14_r1405b_4i_k2], 0) + ISNULL([b14_r1405b_4ii_k2], 0)) AS TOTAL2
+        FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+        LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+        ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+        GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom]
+                ,[b14_r1405a_k2]
+                ,[b14_r1405a_1k2]
+                ,[b14_r1405a_2k2]
+                ,b14_r1405b_4k2
+                ,[b14_r1405b_4i_k2]
+                ,[b14_r1405b_4ii_k2]
+                ,[flag_dok]
+        HAVING [flag_dok]='spw') b
+        WHERE [b14_r1405a_k2]<>[TOTAL] OR [b14_r1405b_4k2]<>[TOTAL2]
+        ";
+
+        $arr_sort_attributes2 = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator',
+            'realname', 
+            'b14_r1405a_k2', 
+            'TOTAL', 
+            'b14_r1405b_4k2', 
+            'TOTAL2',
+            
+        ];
+
+        // Padi
+        $sql3 = "
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        FROM
+        (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
+            +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
+            +[kode_kec]
+            +[kode_desa]
+            +[nbs]) AS kode_wilayah
+            ,[nu]
+            ,[kom]
+            ,[kode_operator]
+            ,[realname]
+            ,[b14_r1405a_k2]
+            ,(ISNULL([b14_r1405a_1k2], 0) + ISNULL([b14_r1405a_2k2], 0)) AS TOTAL
+            ,[b14_r1405b_4k2]
+            ,(ISNULL([b14_r1405b_4i_k2], 0) + ISNULL([b14_r1405b_4ii_k2], 0)) AS TOTAL2
+        FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+        LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+        ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+        GROUP BY [kode_operator], [realname], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov], [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab], [kode_kec], [kode_desa], [nbs], [nu], [kom]
+                ,[b14_r1405a_k2]
+                ,[b14_r1405a_1k2]
+                ,[b14_r1405a_2k2]
+                ,b14_r1405b_4k2
+                ,[b14_r1405b_4i_k2]
+                ,[b14_r1405b_4ii_k2]
+                ,[flag_dok]
+        HAVING [flag_dok]='spd') b
+        WHERE [b14_r1405a_k2]<>[TOTAL] OR [b14_r1405b_4k2]<>[TOTAL2]
+        ";
+
+        $arr_sort_attributes3 = [
+            'kode_wilayah',
+            'nu', 
+            'kom',
+            'kode_operator',
+            'realname', 
+            'b14_r1405a_k2', 
+            'TOTAL', 
+            'b14_r1405b_4k2', 
+            'TOTAL2',
+            
+        ];
+
+        
+
+        $default_order = [];
+
+        return $this->render('xyz', [
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
+
         ]);
     }
 

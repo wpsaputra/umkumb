@@ -74,11 +74,11 @@ $script = <<< JS
         // save the latest tab (http://stackoverflow.com/a/18845441)
         // https://github.com/yiisoft/yii2/issues/4890
         $('a[data-toggle="tab"]').on('click', function (e) {
-            localStorage.setItem('lastTabe', $(e.target).attr('href'));
+            localStorage.setItem('lastTabee', $(e.target).attr('href'));
         });
 
         //go to the latest tab, if it exists:
-        var lastTab = localStorage.getItem('lastTabe');
+        var lastTab = localStorage.getItem('lastTabee');
 
         if (lastTab) {
             $('a[href="'+lastTab+'"]').click();

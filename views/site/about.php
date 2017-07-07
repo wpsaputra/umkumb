@@ -44,7 +44,11 @@ function printGridView($data_provider){
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'kode_operator',
-                'realname',
+                // 'realname',
+                [
+                    'attribute' => 'realname',
+                    'label' => 'Nama Operator',
+                ], 
                 'count',
             ],
             // 'pagerOptions'=>['class' => 'pull-right']
