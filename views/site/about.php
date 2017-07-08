@@ -49,7 +49,11 @@ function printGridView($data_provider){
                     'attribute' => 'realname',
                     'label' => 'Nama Operator',
                 ], 
-                'count',
+                // 'count',
+                [
+                    'attribute' => 'count',
+                    'label' => 'Jumlah Entrian',
+                ],
             ],
             // 'pagerOptions'=>['class' => 'pull-right']
         ]);
@@ -63,6 +67,7 @@ function printGridView($data_provider){
         <li class="active"><a data-toggle="tab" href="#home">Padi</a></li>
         <li><a data-toggle="tab" href="#menu1">Palawija</a></li>
         <li><a data-toggle="tab" href="#menu2">Peternakan</a></li>
+        <li><a data-toggle="tab" href="#menu3">Total</a></li>
     </ul>
 
     <div class="tab-content">
@@ -87,6 +92,14 @@ function printGridView($data_provider){
                 <div class="col-lg-12">
                     <h3>Peternakan</h3>
                     <?php printGridView($provider); ?>
+                </div>
+            </div>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Total</h3>
+                    <?php printGridView($provider4); ?>
                 </div>
             </div>
         </div>
