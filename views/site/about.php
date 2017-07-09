@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Tabs;
 
-$this->title = 'Rincian Entri';
+$this->title = 'Rincian Entri (Total)';
 $this->params['breadcrumbs'][] = $this->title;
 
 $provider->pagination->pageParam = 'stu-page';

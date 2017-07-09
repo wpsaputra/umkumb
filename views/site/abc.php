@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Tabs;
 
-$this->title = 'Rincian Entri';
+$this->title = 'Rincian Entri (By Tanggal)';
 $this->params['breadcrumbs'][] = $this->title;
 
 $provider->pagination->pageParam = 'stu-page';
@@ -69,8 +69,20 @@ function printGridView($data_provider){
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>
     <p> 
-        Tabel berikut merupakan jumlah dokumen yang telah di entri oleh Operator pada tanggal ...
+        Tabel berikut merupakan jumlah dokumen yang telah di entri oleh Operator pada tanggal  
+        <?php 
+            // $date = 'Jul 5, 2017';
+            // echo date('d/m/Y', strtotime($date));
+            echo $tanggal;
+        ?>
     </p>
+    
+
+    <?= $this->render('_search', [
+        'model' => $model,
+    ]) ?>
+
+
 
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#home">Padi</a></li>

@@ -38,7 +38,15 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'Rincian Entri', 'url' => ['/site/about']],
+            // ['label' => 'Rincian Entri', 'url' => ['/site/about']],
+            [
+                'label' => 'Rincian Entri',
+                'items' => [
+                    ['label' => 'Total', 'url' => ['/site/about']],
+                    '<li class="divider"></li>',
+                    ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/abc']],
+                ],
+            ],
             // ['label' => 'Rincian Inkonsistensi', 'url' => ['/site/contact']],
             [
                 'label' => 'Rincian Inkonsistensi',
@@ -48,18 +56,6 @@ AppAsset::register($this);
                     ['label' => 'Tampilkan Inkonsistensi Saja', 'url' => ['/site/xyz']],
                 ],
             ],
-            // Yii::$app->user->isGuest ? (
-            //     ['label' => 'Login', 'url' => ['/site/login']]
-            // ) : (
-            //     '<li>'
-            //     . Html::beginForm(['/site/logout'], 'post')
-            //     . Html::submitButton(
-            //         'Logout (' . Yii::$app->user->identity->username . ')',
-            //         ['class' => 'btn btn-link logout']
-            //     )
-            //     . Html::endForm()
-            //     . '</li>'
-            // )
         ],
     ]);
     NavBar::end();

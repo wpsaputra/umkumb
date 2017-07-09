@@ -145,15 +145,15 @@ class SiteController extends Controller
 
         $arr_sort_attributes = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'B12_R1201', 
-            'TOTAL', 
-            'B12_R1202', 
+            'realname',
+            'B12_R1201',
+            'TOTAL',
+            'B12_R1202',
             'TOTAL2',
-            
+
         ];
         
         // Palawija
@@ -189,15 +189,15 @@ class SiteController extends Controller
 
         $arr_sort_attributes2 = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'b14_r1405a_k2', 
-            'TOTAL', 
-            'b14_r1405b_4k2', 
+            'realname',
+            'b14_r1405a_k2',
+            'TOTAL',
+            'b14_r1405b_4k2',
             'TOTAL2',
-            
+
         ];
 
         // Padi
@@ -233,18 +233,18 @@ class SiteController extends Controller
 
         $arr_sort_attributes3 = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'b14_r1405a_k2', 
-            'TOTAL', 
-            'b14_r1405b_4k2', 
+            'realname',
+            'b14_r1405a_k2',
+            'TOTAL',
+            'b14_r1405b_4k2',
             'TOTAL2',
-            
+
         ];
 
-        
+
 
         $default_order = [];
 
@@ -301,15 +301,15 @@ class SiteController extends Controller
 
         $arr_sort_attributes = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'B12_R1201', 
-            'TOTAL', 
-            'B12_R1202', 
+            'realname',
+            'B12_R1201',
+            'TOTAL',
+            'B12_R1202',
             'TOTAL2',
-            
+
         ];
         
         // Palawija
@@ -346,15 +346,15 @@ class SiteController extends Controller
 
         $arr_sort_attributes2 = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'b14_r1405a_k2', 
-            'TOTAL', 
-            'b14_r1405b_4k2', 
+            'realname',
+            'b14_r1405a_k2',
+            'TOTAL',
+            'b14_r1405b_4k2',
             'TOTAL2',
-            
+
         ];
 
         // Padi
@@ -391,18 +391,18 @@ class SiteController extends Controller
 
         $arr_sort_attributes3 = [
             'kode_wilayah',
-            'nu', 
+            'nu',
             'kom',
             'kode_operator',
-            'realname', 
-            'b14_r1405a_k2', 
-            'TOTAL', 
-            'b14_r1405b_4k2', 
+            'realname',
+            'b14_r1405a_k2',
+            'TOTAL',
+            'b14_r1405b_4k2',
             'TOTAL2',
-            
+
         ];
 
-        
+
 
         $default_order = [];
 
@@ -518,7 +518,7 @@ class SiteController extends Controller
 
 
 
-        $default_order = ['count'=>SORT_DESC];
+        $default_order = ['count' => SORT_DESC];
         // $custom_order = ['jumlah'=>SORT_DESC];
 
 
@@ -529,10 +529,10 @@ class SiteController extends Controller
             'provider4' => $this->getSqlDataProvider($sql4, $arr_sort_attributes4, $default_order),
         ]);
     }
-    
+
     public function actionAbc()
     {
-        // Ternak
+        // Ternak 06/20/2017
         $sql = "
             SELECT b.kode_operator, b.realname, b.count, b.start_entry 
             FROM
@@ -541,7 +541,7 @@ class SiteController extends Controller
             LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
             ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
             GROUP BY [kode_operator], [realname], CAST([start_entry] as DATE)) b
-            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+            WHERE datediff(day, b.start_entry, :tanggal) = 0
         ";
 
         $arr_sort_attributes = [
@@ -561,7 +561,7 @@ class SiteController extends Controller
             ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
             GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
             HAVING [flag_dok]='spw') b
-            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+            WHERE datediff(day, b.start_entry, :tanggal) = 0
         ";
 
         $arr_sort_attributes2 = [
@@ -581,7 +581,7 @@ class SiteController extends Controller
             ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
             GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
             HAVING [flag_dok]='spd') b
-            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+            WHERE datediff(day, b.start_entry, :tanggal) = 0
         ";
 
         $arr_sort_attributes3 = [
@@ -626,7 +626,7 @@ class SiteController extends Controller
             HAVING [flag_dok]='spd') c
             ON a.kode_operator = c.kode_operator AND a.start_entry = c.start_entry
             ) x
-            WHERE datediff(day, x.start_entry, '06/20/2017') = 0
+            WHERE datediff(day, x.start_entry, :tanggal) = 0
         ";
 
         $arr_sort_attributes4 = [
@@ -638,15 +638,32 @@ class SiteController extends Controller
 
 
 
-        $default_order = ['count'=>SORT_DESC];
+        $default_order = ['count' => SORT_DESC];
         // $custom_order = ['jumlah'=>SORT_DESC];
+
+        // Search Model
+        $model = new \yii\base\DynamicModel(['tanggal']);
+        $model->addRule(['tanggal'], 'string', ['max' => 128]);
+        if ($model->load(Yii::$app->request->get()) && $model->validate()) {
+            // do what you want
+            $tanggal = $model->tanggal;
+            $tanggal = date('m/d/Y', strtotime($tanggal));
+            $tanggal_print = date('d F Y', strtotime($tanggal));
+            // $tanggal = date('m/d/Y');
+        }else{
+            $tanggal = date('m/d/Y');
+            $tanggal_print = date('d F Y', strtotime($tanggal));
+        }
+
 
 
         return $this->render('abc', [
-            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
-            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
-            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
-            'provider4' => $this->getSqlDataProvider($sql4, $arr_sort_attributes4, $default_order),
+            'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
+            'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
+            'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
+            'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
+            'model' => $model,
+            'tanggal' => $tanggal_print
         ]);
     }
 
@@ -656,6 +673,28 @@ class SiteController extends Controller
 
         $provider = new SqlDataProvider([
             'sql' => $sql,
+            'totalCount' => $count,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'sort' => [
+                'attributes' => $arr_sort_attributes,
+                'defaultOrder' => $default_order
+            ],
+        ]);
+        return $provider;
+    }
+
+    public function getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $params)
+    {
+        // $sql2 = str_replace(':tanggal', $params, $sql);
+        $count = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')
+            ->bindParam(':tanggal', $params)
+            ->queryScalar();
+
+        $provider = new SqlDataProvider([
+            'sql' => $sql,
+            'params' => [':tanggal' => $params],
             'totalCount' => $count,
             'pagination' => [
                 'pageSize' => 10,
