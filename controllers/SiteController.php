@@ -479,7 +479,10 @@ class SiteController extends Controller
             SELECT x.kode_operator, x.realname, x.count
             FROM
             (
-            SELECT a.kode_operator as kode_operator, a.realname as realname, (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count] 
+            SELECT 
+                COALESCE(a.kode_operator, b.kode_operator, c.kode_operator) as [kode_operator]
+                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), c.realname) as [realname]
+                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count] 
             FROM
             (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count]
             FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
@@ -520,6 +523,126 @@ class SiteController extends Controller
 
 
         return $this->render('about', [
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
+            'provider4' => $this->getSqlDataProvider($sql4, $arr_sort_attributes4, $default_order),
+        ]);
+    }
+    
+    public function actionAbc()
+    {
+        // Ternak
+        $sql = "
+            SELECT b.kode_operator, b.realname, b.count, b.start_entry 
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], CAST([start_entry] as DATE)) b
+            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+        ";
+
+        $arr_sort_attributes = [
+            'kode_operator',
+            'realname',
+            'count',
+            'start_entry'
+        ];
+
+        // Palawija
+        $sql2 = "
+            SELECT b.kode_operator, b.realname, b.count, b.start_entry
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry] 
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
+            HAVING [flag_dok]='spw') b
+            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+        ";
+
+        $arr_sort_attributes2 = [
+            'kode_operator',
+            'realname',
+            'count',
+            'start_entry'
+        ];
+
+        // Padi
+        $sql3 = "
+            SELECT b.kode_operator, b.realname, b.count, b.start_entry
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry] 
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
+            HAVING [flag_dok]='spd') b
+            WHERE datediff(day, b.start_entry, '06/20/2017') = 0
+        ";
+
+        $arr_sort_attributes3 = [
+            'kode_operator',
+            'realname',
+            'count',
+            'start_entry'
+        ];
+
+        // Total
+        $sql4 = "
+            SELECT x.kode_operator, x.realname, x.count, x.start_entry
+            FROM
+            (
+            SELECT 
+                COALESCE(a.kode_operator, b.kode_operator, c.kode_operator) as [kode_operator]
+                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), c.realname) as [realname]
+                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count]
+                , COALESCE(NULLIF(a.start_entry,''), NULLIF(b.start_entry,''), c.start_entry) as [start_entry]
+            FROM
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], CAST([start_entry] as DATE)) a
+
+            FULL OUTER JOIN
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
+            HAVING [flag_dok]='spw') b
+            ON a.kode_operator = b.kode_operator AND a.start_entry = b.start_entry
+
+            FULL OUTER JOIN
+            (SELECT [kode_operator], [realname], COUNT([jumlah_entri]) as [count], CAST([start_entry] as DATE) as [start_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[kode_operator]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [kode_operator], [realname], [flag_dok], CAST([start_entry] as DATE)
+            HAVING [flag_dok]='spd') c
+            ON a.kode_operator = c.kode_operator AND a.start_entry = c.start_entry
+            ) x
+            WHERE datediff(day, x.start_entry, '06/20/2017') = 0
+        ";
+
+        $arr_sort_attributes4 = [
+            'kode_operator',
+            'realname',
+            'count',
+            'start_entry'
+        ];
+
+
+
+        $default_order = ['count'=>SORT_DESC];
+        // $custom_order = ['jumlah'=>SORT_DESC];
+
+
+        return $this->render('abc', [
             'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
             'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
             'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),

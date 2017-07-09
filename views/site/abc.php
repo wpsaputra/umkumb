@@ -23,11 +23,11 @@ $script = <<< JS
         // save the latest tab (http://stackoverflow.com/a/18845441)
         // https://github.com/yiisoft/yii2/issues/4890
         $('a[data-toggle="tab"]').on('click', function (e) {
-            localStorage.setItem('lastTab', $(e.target).attr('href'));
+            localStorage.setItem('lastTababc', $(e.target).attr('href'));
         });
 
         //go to the latest tab, if it exists:
-        var lastTab = localStorage.getItem('lastTab');
+        var lastTab = localStorage.getItem('lastTababc');
 
         if (lastTab) {
             $('a[href="'+lastTab+'"]').click();
@@ -48,7 +48,13 @@ function printGridView($data_provider){
                 [
                     'attribute' => 'realname',
                     'label' => 'Nama Operator',
-                ], 
+                ],
+                // 'start_entry',
+                [
+                    'attribute' => 'start_entry',
+                    'label' => 'Tanggal Entri',
+                ],
+
                 // 'count',
                 [
                     'attribute' => 'count',
@@ -63,7 +69,7 @@ function printGridView($data_provider){
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>
     <p> 
-        Tabel berikut merupakan jumlah total dokumen yang telah di entri oleh Operator.
+        Tabel berikut merupakan jumlah dokumen yang telah di entri oleh Operator pada tanggal ...
     </p>
 
     <ul class="nav nav-tabs">
