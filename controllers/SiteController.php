@@ -105,7 +105,7 @@ class SiteController extends Controller
     {
         // Ternak
         $sql = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM 
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab]
@@ -114,6 +114,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[B12_R1201]
@@ -140,7 +142,9 @@ class SiteController extends Controller
                 ,[B12_R1202c]
                 ,[B12_R1202d]
                 ,[B12_R1202e]
-                ,[B12_R1202f]) b
+                ,[B12_R1202f]
+                ,[b1_r113]
+                ,[start_entry]) b
         ";
 
         $arr_sort_attributes = [
@@ -153,12 +157,14 @@ class SiteController extends Controller
             'TOTAL',
             'B12_R1202',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
         
         // Palawija
         $sql2 = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
@@ -167,6 +173,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[b14_r1405a_k2]
@@ -184,6 +192,8 @@ class SiteController extends Controller
                 ,[b14_r1405b_4i_k2]
                 ,[b14_r1405b_4ii_k2]
                 ,[flag_dok]
+                ,[b1_r113]
+                ,[start_entry]
         HAVING [flag_dok]='spw') b
         ";
 
@@ -197,12 +207,14 @@ class SiteController extends Controller
             'TOTAL',
             'b14_r1405b_4k2',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
 
         // Padi
         $sql3 = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
@@ -211,6 +223,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[b14_r1405a_k2]
@@ -228,6 +242,8 @@ class SiteController extends Controller
                 ,[b14_r1405b_4i_k2]
                 ,[b14_r1405b_4ii_k2]
                 ,[flag_dok]
+                ,[b1_r113]
+                ,[start_entry]
         HAVING [flag_dok]='spd') b
         ";
 
@@ -241,6 +257,8 @@ class SiteController extends Controller
             'TOTAL',
             'b14_r1405b_4k2',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
 
@@ -260,7 +278,7 @@ class SiteController extends Controller
     {
         // Ternak
         $sql = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.B12_R1201, b.TOTAL, b.B12_R1202, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM 
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_ternak].[kode_kab]
@@ -269,6 +287,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[B12_R1201]
@@ -295,7 +315,9 @@ class SiteController extends Controller
                 ,[B12_R1202c]
                 ,[B12_R1202d]
                 ,[B12_R1202e]
-                ,[B12_R1202f]) b
+                ,[B12_R1202f]
+                ,[b1_r113]
+                ,[start_entry]) b
         WHERE [B12_R1201]<>[TOTAL] OR [B12_R1202]<>[TOTAL2]
         ";
 
@@ -309,12 +331,14 @@ class SiteController extends Controller
             'TOTAL',
             'B12_R1202',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
         
         // Palawija
         $sql2 = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
@@ -323,6 +347,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[b14_r1405a_k2]
@@ -340,6 +366,8 @@ class SiteController extends Controller
                 ,[b14_r1405b_4i_k2]
                 ,[b14_r1405b_4ii_k2]
                 ,[flag_dok]
+                ,[b1_r113]
+                ,[start_entry]
         HAVING [flag_dok]='spw') b
         WHERE [b14_r1405a_k2]<>[TOTAL] OR [b14_r1405b_4k2]<>[TOTAL2]
         ";
@@ -354,12 +382,14 @@ class SiteController extends Controller
             'TOTAL',
             'b14_r1405b_4k2',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
 
         // Padi
         $sql3 = "
-        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2 
+        SELECT b.kode_wilayah, b.nu, b.kom,b.kode_operator, b.realname, b.b14_r1405a_k2, b.TOTAL, b.b14_r1405b_4k2, b.TOTAL2, b.b1_r113, CAST([start_entry] as DATE) as [start_entry] 
         FROM
         (SELECT ([SOUT2017Sampel].[dbo].[t_rt_tp].[kode_prov]
             +[SOUT2017Sampel].[dbo].[t_rt_tp].[kode_kab]
@@ -368,6 +398,8 @@ class SiteController extends Controller
             +[nbs]) AS kode_wilayah
             ,[nu]
             ,[kom]
+            ,[b1_r113]
+            ,[start_entry]
             ,[kode_operator]
             ,[realname]
             ,[b14_r1405a_k2]
@@ -385,6 +417,8 @@ class SiteController extends Controller
                 ,[b14_r1405b_4i_k2]
                 ,[b14_r1405b_4ii_k2]
                 ,[flag_dok]
+                ,[b1_r113]
+                ,[start_entry]
         HAVING [flag_dok]='spd') b
         WHERE [b14_r1405a_k2]<>[TOTAL] OR [b14_r1405b_4k2]<>[TOTAL2]
         ";
@@ -399,6 +433,8 @@ class SiteController extends Controller
             'TOTAL',
             'b14_r1405b_4k2',
             'TOTAL2',
+            'b1_r113',
+            'start_entry'
 
         ];
 

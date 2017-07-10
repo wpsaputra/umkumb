@@ -38,6 +38,11 @@ function printGridView($model, $col1, $col2)
             'kode_wilayah',
             'nu',
             'kom',
+            'b1_r113', 
+            [
+                'attribute' => 'start_entry',
+                'label' => 'Tanggal Entri',
+            ],
                         // 'kode_operator',
                         // 'realname',
             [
