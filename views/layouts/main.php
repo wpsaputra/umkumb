@@ -36,9 +36,19 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
+        'encodeLabels' => false,
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             // ['label' => 'Rincian Entri', 'url' => ['/site/about']],
+            [
+                'label' => 'Rincian Validasi ' . Html::tag('span', 'New', ['class' => 'badge']),
+                'items' => [
+                    ['label' => 'Total', 'url' => ['/site/retotal']],
+                    '<li class="divider"></li>',
+                    ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/retanggal']],
+                ],
+            ],
+            
             [
                 'label' => 'Rincian Entri',
                 'items' => [
@@ -47,6 +57,7 @@ AppAsset::register($this);
                     ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/abc']],
                 ],
             ],
+            
             // ['label' => 'Rincian Inkonsistensi', 'url' => ['/site/contact']],
             [
                 'label' => 'Rincian Inkonsistensi',

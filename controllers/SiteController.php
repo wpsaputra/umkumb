@@ -742,4 +742,263 @@ class SiteController extends Controller
         ]);
         return $provider;
     }
+
+
+    public function actionRetotal()
+    {
+        // Ternak
+        $sql = '
+            SELECT b.clean_by, b.realname, b.count 
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            WHERE [clean_by] IS NOT NULL
+            GROUP BY [clean_by], [realname]) b
+        ';
+
+        $arr_sort_attributes = [
+            'clean_by',
+            'realname',
+            'count',
+        ];
+
+        // Palawija
+        $sql2 = "
+            SELECT b.clean_by, b.realname, b.count
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            WHERE [clean_by] IS NOT NULL
+            GROUP BY [clean_by], [realname], [flag_dok]
+            HAVING [flag_dok]='spw') b
+        ";
+
+        $arr_sort_attributes2 = [
+            'clean_by',
+            'realname',
+            'count',
+        ];
+
+        // Padi
+        $sql3 = "
+            SELECT b.clean_by, b.realname, b.count
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            WHERE [clean_by] IS NOT NULL
+            GROUP BY [clean_by], [realname], [flag_dok]
+            HAVING [flag_dok]='spd') b
+        ";
+
+        $arr_sort_attributes3 = [
+            'clean_by',
+            'realname',
+            'count',
+        ];
+
+        // Total
+        $sql4 = "
+            SELECT x.clean_by, x.realname, x.count
+            FROM
+            (
+            SELECT 
+                COALESCE(a.clean_by, b.clean_by, c.clean_by) as [clean_by]
+                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), c.realname) as [realname]
+                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count] 
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname]) a
+
+            FULL OUTER JOIN
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok]
+            HAVING [flag_dok]='spw') b
+            ON a.clean_by = b.clean_by
+
+            FULL OUTER JOIN
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok]
+            HAVING [flag_dok]='spd') c
+            ON a.clean_by = c.clean_by
+            ) x
+            WHERE x.clean_by IS NOT NULL
+
+        ";
+
+        $arr_sort_attributes4 = [
+            'clean_by',
+            'realname',
+            'count',
+        ];
+
+
+
+        $default_order = ['count' => SORT_DESC];
+        // $custom_order = ['jumlah'=>SORT_DESC];
+
+
+        return $this->render('retotal', [
+            'provider' => $this->getSqlDataProvider($sql, $arr_sort_attributes, $default_order),
+            'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
+            'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
+            'provider4' => $this->getSqlDataProvider($sql4, $arr_sort_attributes4, $default_order),
+        ]);
+    }
+
+    //retanggal
+    public function actionRetanggal()
+    {
+        // Ternak 06/20/2017
+        $sql = "
+            SELECT b.clean_by, b.realname, b.count, b.end_entry 
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], CAST([end_entry] as DATE)) b
+            WHERE datediff(day, b.end_entry, :tanggal) = 0
+        ";
+
+        $arr_sort_attributes = [
+            'clean_by',
+            'realname',
+            'count',
+            'end_entry'
+        ];
+
+        // Palawija
+        $sql2 = "
+            SELECT b.clean_by, b.realname, b.count, b.end_entry
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry] 
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok], CAST([end_entry] as DATE)
+            HAVING [flag_dok]='spw') b
+            WHERE datediff(day, b.end_entry, :tanggal) = 0
+        ";
+
+        $arr_sort_attributes2 = [
+            'clean_by',
+            'realname',
+            'count',
+            'end_entry'
+        ];
+
+        // Padi
+        $sql3 = "
+            SELECT b.clean_by, b.realname, b.count, b.end_entry
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry] 
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok], CAST([end_entry] as DATE)
+            HAVING [flag_dok]='spd') b
+            WHERE datediff(day, b.end_entry, :tanggal) = 0
+        ";
+
+        $arr_sort_attributes3 = [
+            'clean_by',
+            'realname',
+            'count',
+            'end_entry'
+        ];
+
+        // Total
+        $sql4 = "
+            SELECT x.clean_by, x.realname, x.count, x.end_entry
+            FROM
+            (
+            SELECT 
+                COALESCE(a.clean_by, b.clean_by, c.clean_by) as [clean_by]
+                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), c.realname) as [realname]
+                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count]
+                , COALESCE(NULLIF(a.end_entry,''), NULLIF(b.end_entry,''), c.end_entry) as [end_entry]
+            FROM
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], CAST([end_entry] as DATE)) a
+
+            FULL OUTER JOIN
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok], CAST([end_entry] as DATE)
+            HAVING [flag_dok]='spw') b
+            ON a.clean_by = b.clean_by AND a.end_entry = b.end_entry
+
+            FULL OUTER JOIN
+            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count], CAST([end_entry] as DATE) as [end_entry]
+            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
+            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
+            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
+            GROUP BY [clean_by], [realname], [flag_dok], CAST([end_entry] as DATE)
+            HAVING [flag_dok]='spd') c
+            ON a.clean_by = c.clean_by AND a.end_entry = c.end_entry
+            ) x
+            WHERE datediff(day, x.end_entry, :tanggal) = 0
+        ";
+
+        $arr_sort_attributes4 = [
+            'clean_by',
+            'realname',
+            'count',
+            'end_entry'
+        ];
+
+
+
+        $default_order = ['count' => SORT_DESC];
+        // $custom_order = ['jumlah'=>SORT_DESC];
+
+        // Search Model
+        $model = new \yii\base\DynamicModel(['tanggal']);
+        $model->addRule(['tanggal'], 'string', ['max' => 128]);
+        if ($model->load(Yii::$app->request->get()) && $model->validate()) {
+            // do what you want
+            $tanggal = $model->tanggal;
+            $tanggal = date('m/d/Y', strtotime($tanggal));
+            $tanggal_print = date('d F Y', strtotime($tanggal));
+            // $tanggal = date('m/d/Y');
+        }else{
+            $tanggal = date('m/d/Y');
+            $tanggal_print = date('d F Y', strtotime($tanggal));
+        }
+
+
+
+        return $this->render('retanggal', [
+            'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
+            'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
+            'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
+            'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
+            'model' => $model,
+            'tanggal' => $tanggal_print
+        ]);
+    }
+
+
+
+
 }
