@@ -127,6 +127,7 @@ function printPie($judul, $clean, $error, $blm_entri)
         <div class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <strong>Warning!</strong> Pengolahan SOUT akan berakhir <?php print_r($diff->days); ?> hari lagi
+            <p>- Jumlah Entrian Total <?php echo '<strong>'.($clean_total+$error_total)*$total_total.'</strong>'.' dari '.'<strong>'.$total_total.'</strong>'.' dokumen' ?></p>
         </div>
 
         <div class="row">
