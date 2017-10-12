@@ -64,6 +64,11 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    public function actionProgress()
+    {
+        return $this->render('progress');
+    }
+
     /**
      * Login action.
      *

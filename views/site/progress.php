@@ -9,10 +9,10 @@ $error_total = 0;
 $blm_entri_total = 0;
 
 // UMK
-$sql = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMK]";
+$sql = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMK_VAL] where [StatusDok]='C'";
 $clean_umk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
-$sql2 = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMK] where [Kategori]='ZZZ'";
+$sql2 = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMK_VAL] where [StatusDok]='E'";;
 $error_umk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
 $total_umk = 21584;
 $blm_entri_umk = $total_umk - $clean_umk - $error_umk;
@@ -26,10 +26,10 @@ $error_umk = $error_umk / $total_umk;
 $blm_entri_umk = $blm_entri_umk / $total_umk;
 
 // UMB-P
-$sql = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMB_SP]";
+$sql = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_SP_VAL] where [StatusDok]='C'";
 $clean_umbp = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
-$sql2 = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMK] where [Kategori]='ZZZ'";
+$sql2 = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_SP_VAL] where [StatusDok]='E'";;
 $error_umbp = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
 $total_umbp = 544;
 $blm_entri_umbp = $total_umbp - $clean_umbp - $error_umbp;
@@ -43,10 +43,10 @@ $error_umbp = $error_umbp / $total_umbp;
 $blm_entri_umbp = $blm_entri_umbp / $total_umbp;
 
 // UMB-K
-$sql = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMB_JK]";
+$sql = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_JK_VAL] where [StatusDok]='C'";
 $clean_umbk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
-$sql2 = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMK] where [Kategori]='ZZZ'";
+$sql2 = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_JK_VAL] where [StatusDok]='E'";;
 $error_umbk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
 $total_umbk = 295;
 $blm_entri_umbk = $total_umbk - $clean_umbk - $error_umbk;
@@ -60,10 +60,10 @@ $error_umbk = $error_umbk / $total_umbk;
 $blm_entri_umbk = $blm_entri_umbk / $total_umbk;
 
 // UMB-NK
-$sql = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMB_JNK]";
+$sql = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_JNK_VAL] where [StatusDok]='C'";
 $clean_umbnk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql . ') as count_alias')->queryScalar();
 
-$sql2 = "SELECT [IDPerusahaan] FROM [UMB_UMK_2017].[dbo].[UMK] where [Kategori]='ZZZ'";
+$sql2 = "SELECT [StatusDok] FROM [UMB_UMK_2017].[dbo].[UMB_JNK_VAL] where [StatusDok]='E'";;
 $error_umbnk = Yii::$app->db->createCommand('SELECT COUNT(*) FROM (' . $sql2 . ') as count_alias')->queryScalar();
 $total_umbnk = 1519;
 $blm_entri_umbnk = $total_umbnk - $clean_umbnk - $error_umbnk;
@@ -81,7 +81,6 @@ $total_total = $total_umk + $total_umbp + $total_umbk + $total_umbnk;
 $clean_total = $clean_total / $total_total;
 $error_total = $error_total / $total_total;
 $blm_entri_total = $blm_entri_total / $total_total;
-
 
 // https://stackoverflow.com/questions/676824/how-to-calculate-the-difference-between-two-dates-using-php
 $current_date = new DateTime();
@@ -104,7 +103,7 @@ function printPie($judul, $clean, $error, $blm_entri)
                 // '#7cb5ec',
 
                 '#90ed7d',
-                //'#f7a35c',
+                '#f7a35c',
                 '#3A3A4F',
                 // '#434348',
             ],
@@ -126,8 +125,8 @@ function printPie($judul, $clean, $error, $blm_entri)
                     'name' => 'Elements',
                     'data' => [
                         ['Clean', $clean],
-                        //['Error', $error],
-                        ['Blm Entri', $blm_entri],
+                        ['Error', $error],
+                        ['Blm Transfer', $blm_entri],
                     ],
                                         // 'dataLabels' => [
                                         //     'enabled' => false
@@ -146,22 +145,23 @@ function printPie($judul, $clean, $error, $blm_entri)
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <p><strong>Warning!</strong> Pengolahan UMK UMB akan berakhir <?php print_r($diff->days); ?> hari lagi</p>
             <p>- Jumlah Entrian Total <?php echo '<strong>'.($clean_total+$error_total)*$total_total.'</strong>'.' dari '.'<strong>'.$total_total.'</strong>'.' dokumen' ?></p>
+            <p>- Jumlah Clean Total <?php echo '<strong>'.($clean_total)*$total_total.'</strong>'.' dari '.'<strong>'.$total_total.'</strong>'.' dokumen' ?></p>
         </div>
 
         <div class="row">
             <div class="col-lg-4">
-                <?php printPie('Progress Entri UMK', $clean_umk, $error_umk, $blm_entri_umk); ?>
+                <?php printPie('Progress Validasi UMK', $clean_umk, $error_umk, $blm_entri_umk); ?>
             </div>
             <div class="col-lg-4">
-                <?php printPie('Progress Entri UMB-P', $clean_umbp, $error_umbp, $blm_entri_umbp); ?>
+                <?php printPie('Progress Validasi UMB-P', $clean_umbp, $error_umbp, $blm_entri_umbp); ?>
             </div>
             <div class="col-lg-4">
-                <?php printPie('Progress Entri UMB-K', $clean_umbk, $error_umbk, $blm_entri_umbk); ?>
+                <?php printPie('Progress Validasi UMB-K', $clean_umbk, $error_umbk, $blm_entri_umbk); ?>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <?php printPie('Progress Entri UMB-NK', $clean_umbnk, $error_umbnk, $blm_entri_umbnk); ?>
+                <?php printPie('Progress Validasi UMB-NK', $clean_umbnk, $error_umbnk, $blm_entri_umbnk); ?>
             </div>
             <div class="col-lg-4">
                 <?php printPie('Progress Entri Total', $clean_total, $error_total, $blm_entri_total); ?>

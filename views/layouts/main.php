@@ -38,7 +38,15 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'encodeLabels' => false,
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
+            // ['label' => 'Home', 'url' => ['/site/index']],
+            [
+                'label' => 'Progress',
+                'items' => [
+                    ['label' => 'Entri', 'url' => ['/site/index']],
+                    '<li class="divider"></li>',
+                    ['label' => 'Validasi', 'url' => ['/site/progress']],
+                ],
+            ],
             // ['label' => 'Rincian Entri', 'url' => ['/site/about']],
             [
                 'label' => 'Rincian Validasi ' . Html::tag('span', 'New', ['class' => 'badge']),
