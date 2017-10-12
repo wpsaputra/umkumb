@@ -49,15 +49,6 @@ AppAsset::register($this);
             ],
             // ['label' => 'Rincian Entri', 'url' => ['/site/about']],
             [
-                'label' => 'Rincian Validasi ' . Html::tag('span', 'New', ['class' => 'badge']),
-                'items' => [
-                    ['label' => 'Total', 'url' => ['/site/retotal']],
-                    '<li class="divider"></li>',
-                    ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/retanggal']],
-                ],
-            ],
-            
-            [
                 'label' => 'Rincian Entri',
                 'items' => [
                     ['label' => 'Total', 'url' => ['/site/about']],
@@ -65,6 +56,17 @@ AppAsset::register($this);
                     ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/abc']],
                 ],
             ],
+
+            [
+                // 'label' => 'Rincian Validasi ' . Html::tag('span', 'New', ['class' => 'badge']),
+                'label' => 'Rincian Validasi ',
+                'items' => [
+                    ['label' => 'Total', 'url' => ['/site/retotal']],
+                    '<li class="divider"></li>',
+                    ['label' => 'Berdasarkan Tanggal', 'url' => ['/site/retanggal']],
+                ],
+            ],
+
             
             // ['label' => 'Rincian Inkonsistensi', 'url' => ['/site/contact']],
             [
