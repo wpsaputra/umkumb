@@ -728,8 +728,9 @@ class SiteController extends Controller
         //     'model' => $model,
         //     'tanggal' => $tanggal_print
         // ]);
-
-        return $this->renderPartial('404');
+        
+        $this->layout = 'blank';
+        return $this->render('404');
     }
 
     public function getSqlDataProvider($sql, $arr_sort_attributes, $default_order)
@@ -1053,7 +1054,8 @@ class SiteController extends Controller
         //     'tanggal' => $tanggal_print
         // ]);
 
-        return $this->renderPartial('404');
+        $this->layout = 'blank';
+        return $this->render('404');
     }
 
 
