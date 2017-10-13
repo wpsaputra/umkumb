@@ -164,7 +164,7 @@ function printPie($judul, $clean, $error, $blm_entri)
                 <?php printPie('Progress Validasi UMB-NK', $clean_umbnk, $error_umbnk, $blm_entri_umbnk); ?>
             </div>
             <div class="col-lg-4">
-                <?php printPie('Progress Entri Total', $clean_total, $error_total, $blm_entri_total); ?>
+                <?php printPie('Progress Validasi Total', $clean_total, $error_total, $blm_entri_total); ?>
             </div>
         </div>
     </div>

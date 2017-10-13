@@ -720,14 +720,16 @@ class SiteController extends Controller
 
 
 
-        return $this->render('abc', [
-            'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
-            'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
-            'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
-            'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
-            'model' => $model,
-            'tanggal' => $tanggal_print
-        ]);
+        // return $this->render('abc', [
+        //     'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
+        //     'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
+        //     'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
+        //     'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
+        //     'model' => $model,
+        //     'tanggal' => $tanggal_print
+        // ]);
+
+        return $this->renderPartial('404');
     }
 
     public function getSqlDataProvider($sql, $arr_sort_attributes, $default_order)
@@ -773,17 +775,17 @@ class SiteController extends Controller
 
     public function actionRetotal()
     {
-        // Ternak
-        $sql = '
+        // UMK
+        $sql = "
             SELECT b.clean_by, b.realname, b.count 
             FROM
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            WHERE [clean_by] IS NOT NULL
-            GROUP BY [clean_by], [realname]) b
-        ';
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) b
+        ";
 
         $arr_sort_attributes = [
             'clean_by',
@@ -791,17 +793,16 @@ class SiteController extends Controller
             'count',
         ];
 
-        // Palawija
+        // UMB-P
         $sql2 = "
             SELECT b.clean_by, b.realname, b.count
             FROM
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            WHERE [clean_by] IS NOT NULL
-            GROUP BY [clean_by], [realname], [flag_dok]
-            HAVING [flag_dok]='spw') b
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_SP_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_SP_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) b
         ";
 
         $arr_sort_attributes2 = [
@@ -810,17 +811,16 @@ class SiteController extends Controller
             'count',
         ];
 
-        // Padi
+        // UMB-K
         $sql3 = "
             SELECT b.clean_by, b.realname, b.count
             FROM
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            WHERE [clean_by] IS NOT NULL
-            GROUP BY [clean_by], [realname], [flag_dok]
-            HAVING [flag_dok]='spd') b
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_JK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_JK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) b
         ";
 
         $arr_sort_attributes3 = [
@@ -829,45 +829,73 @@ class SiteController extends Controller
             'count',
         ];
 
-        // Total
+        // UMB-NK
         $sql4 = "
+            SELECT b.clean_by, b.realname, b.count
+            FROM
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_JNK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_JNK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) b
+        ";
+
+        $arr_sort_attributes4 = [
+            'clean_by',
+            'realname',
+            'count',
+        ];
+
+        // Total
+        $sql5 = "
             SELECT x.clean_by, x.realname, x.count
             FROM
             (
             SELECT 
-                COALESCE(a.clean_by, b.clean_by, c.clean_by) as [clean_by]
-                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), c.realname) as [realname]
-                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0)) AS [count] 
+                COALESCE(a.clean_by, b.clean_by, c.clean_by, d.clean_by) as [clean_by]
+                , COALESCE(NULLIF(a.realname,''), NULLIF(b.realname,''), NULLIF(c.realname,''), d.realname) as [realname]
+                , (ISNULL(a.count, 0) + ISNULL(b.count, 0) + ISNULL(c.count, 0) + ISNULL(d.count, 0)) AS [count] 
             FROM
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_ternak]   
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_ternak].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            GROUP BY [clean_by], [realname]) a
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) a
 
             FULL OUTER JOIN
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            GROUP BY [clean_by], [realname], [flag_dok]
-            HAVING [flag_dok]='spw') b
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_SP_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_SP_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) b
             ON a.clean_by = b.clean_by
 
             FULL OUTER JOIN
-            (SELECT [clean_by], [realname], COUNT([jumlah_entri]) as [count]
-            FROM [SOUT2017Sampel].[dbo].[t_rt_tp]
-            LEFT JOIN [SOUT2017Sampel].[dbo].[m_operator] 
-            ON [SOUT2017Sampel].[dbo].[t_rt_tp].[clean_by]=[SOUT2017Sampel].[dbo].[m_operator].[id_operator]
-            GROUP BY [clean_by], [realname], [flag_dok]
-            HAVING [flag_dok]='spd') c
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_JK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_JK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) c
             ON a.clean_by = c.clean_by
+
+			FULL OUTER JOIN
+            (SELECT [OperatorDok] as [clean_by], [Realname] as [realname], COUNT([JumlahEntri]) as [count]
+            FROM [UMB_UMK_2017].[dbo].[UMB_JNK_VAL]   
+            LEFT JOIN [UMB_UMK_2017].[dbo].[Operator] 
+            ON [UMB_UMK_2017].[dbo].[UMB_JNK_VAL].[OperatorDok]=[UMB_UMK_2017].[dbo].[Operator].[ID]
+            WHERE [StatusDok]='C'
+            GROUP BY [OperatorDok], [realname]) d
+            ON a.clean_by = d.clean_by
             ) x
             WHERE x.clean_by IS NOT NULL
 
         ";
 
-        $arr_sort_attributes4 = [
+        $arr_sort_attributes5 = [
             'clean_by',
             'realname',
             'count',
@@ -884,6 +912,7 @@ class SiteController extends Controller
             'provider2' => $this->getSqlDataProvider($sql2, $arr_sort_attributes2, $default_order),
             'provider3' => $this->getSqlDataProvider($sql3, $arr_sort_attributes3, $default_order),
             'provider4' => $this->getSqlDataProvider($sql4, $arr_sort_attributes4, $default_order),
+            'provider5' => $this->getSqlDataProvider($sql5, $arr_sort_attributes5, $default_order),
         ]);
     }
 
@@ -1015,14 +1044,16 @@ class SiteController extends Controller
 
 
 
-        return $this->render('retanggal', [
-            'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
-            'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
-            'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
-            'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
-            'model' => $model,
-            'tanggal' => $tanggal_print
-        ]);
+        // return $this->render('retanggal', [
+        //     'provider' => $this->getSqlDataProvider2($sql, $arr_sort_attributes, $default_order, $tanggal),
+        //     'provider2' => $this->getSqlDataProvider2($sql2, $arr_sort_attributes2, $default_order, $tanggal),
+        //     'provider3' => $this->getSqlDataProvider2($sql3, $arr_sort_attributes3, $default_order, $tanggal),
+        //     'provider4' => $this->getSqlDataProvider2($sql4, $arr_sort_attributes4, $default_order, $tanggal),
+        //     'model' => $model,
+        //     'tanggal' => $tanggal_print
+        // ]);
+
+        return $this->renderPartial('404');
     }
 
 

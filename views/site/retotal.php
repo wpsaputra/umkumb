@@ -9,14 +9,17 @@ use yii\bootstrap\Tabs;
 $this->title = 'Rincian Validasi (Total)';
 $this->params['breadcrumbs'][] = $this->title;
 
-$provider->pagination->pageParam = 'stu-page';
-$provider->sort->sortParam = 'stu-sort';
+$provider->pagination->pageParam = 'umk-page';
+$provider->sort->sortParam = 'umk-sort';
 
-$provider2->pagination->pageParam = 'spw-page';
-$provider2->sort->sortParam = 'spw-sort';
+$provider2->pagination->pageParam = 'umbp-page';
+$provider2->sort->sortParam = 'umbp-sort';
 
-$provider3->pagination->pageParam = 'spd-page';
-$provider3->sort->sortParam = 'spd-sort';
+$provider3->pagination->pageParam = 'umbk-page';
+$provider3->sort->sortParam = 'umbk-sort';
+
+$provider4->pagination->pageParam = 'umbnk-page';
+$provider4->sort->sortParam = 'umbnk-sort';
 
 $script = <<< JS
     $(function() {
@@ -71,25 +74,26 @@ function printGridView($data_provider){
     </p>
 
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">Padi</a></li>
-        <li><a data-toggle="tab" href="#menu1">Palawija</a></li>
-        <li><a data-toggle="tab" href="#menu2">Peternakan</a></li>
-        <li><a data-toggle="tab" href="#menu3">Total</a></li>
+        <li class="active"><a data-toggle="tab" href="#home">UMK</a></li>
+        <li><a data-toggle="tab" href="#menu1">UMB-P</a></li>
+        <li><a data-toggle="tab" href="#menu2">UMB-K</a></li>
+        <li><a data-toggle="tab" href="#menu3">UMB-NK</a></li>
+        <li><a data-toggle="tab" href="#menu4">Total</a></li>
     </ul>
 
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Padi</h3>
-                    <?php printGridView($provider3); ?>
+                    <h3>UMK</h3>
+                    <?php printGridView($provider); ?>
                 </div>
             </div>
         </div>
         <div id="menu1" class="tab-pane fade">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Palawija</h3>
+                    <h3>UMB-P</h3>
                     <?php printGridView($provider2); ?>
                 </div>
             </div>
@@ -97,16 +101,24 @@ function printGridView($data_provider){
         <div id="menu2" class="tab-pane fade">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Peternakan</h3>
-                    <?php printGridView($provider); ?>
+                    <h3>UMB-K</h3>
+                    <?php printGridView($provider3); ?>
                 </div>
             </div>
         </div>
         <div id="menu3" class="tab-pane fade">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Total</h3>
+                    <h3>UMB-NK</h3>
                     <?php printGridView($provider4); ?>
+                </div>
+            </div>
+        </div>
+        <div id="menu4" class="tab-pane fade">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Total</h3>
+                    <?php printGridView($provider5); ?>
                 </div>
             </div>
         </div>
