@@ -125,7 +125,7 @@ function printPie($judul, $clean, $error, $blm_entri)
                     'type' => 'pie',
                     'name' => 'Elements',
                     'data' => [
-                        ['Clean', $clean],
+                        ['Sudah Entri', $clean],
                         //['Error', $error],
                         ['Blm Entri', $blm_entri],
                     ],
